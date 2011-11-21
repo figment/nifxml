@@ -662,7 +662,7 @@
         <add name="b" type="float">Blue color component.</add>
     </compound>
 
-    <compound name="ByteColor3" niflibtype="Color3" ><!--nifskopetype="color3" -->
+    <compound name="ByteColor3"><!-- niflibtype="Color3" nifskopetype="color3" -->
         A color without alpha (red, green, blue).
         <add name="r" type="byte">Red color component.</add>
         <add name="g" type="byte">Green color component.</add>
@@ -677,7 +677,7 @@
         <add name="a" type="float">Alpha.</add>
     </compound>
 
-    <compound name="ByteColor4" niflibtype="Color4"> <!--nifskopetype="color4"-->
+    <compound name="ByteColor4"><!-- niflibtype="Color4" nifskopetype="color4" -->
         A color with alpha (red, green, blue, alpha).
         <add name="r" type="byte">Red color component.</add>
         <add name="g" type="byte">Green color component.</add>
