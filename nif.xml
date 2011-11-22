@@ -4145,11 +4145,12 @@
         Bethesda-specific fade node.
     </niobject>
 
-    <enum name="BSShaderType" storage="uint">
+    <enum name="BSShaderType" storage="byte">
         The type of animation interpolation (blending) that will be used on the associated key frames.
         <option value="0" name="SHADER_TALL_GRASS">Tall Grass Shader</option>
         <option value="1" name="SHADER_DEFAULT">Standard Lighting Shader</option>
         <option value="10" name="SHADER_SKY">Sky Shader</option>
+		<option value="11" name="SHADER_LIGHTING">Lighting Shader ?</option>
 		<option value="14" name="SHADER_SKIN">Skin Shader</option>
         <option value="17" name="SHADER_WATER">Water Shader</option>
         <option value="29" name="SHADER_LIGHTING30">Lighting 3.0 Shader</option>
@@ -4196,17 +4197,22 @@
     <niobject name="BSShaderProperty" abstract="0" inherit="NiProperty">
         Bethesda-specific Property node
 		<add name="Unknown Flag" type="uint" ver1="20.2.0.7" vercond="User Version == 12" is_manual_update="3">Unknown</add>
-        <add name="Flags" type="Flags" default="1" >Unknown</add>
+        
+        <add name="Flags" type="Flags" default="1" vercond="User Version &lt; 12">Unknown</add>
 		<add name="Shader Type" type="BSShaderType" default="SHADER_DEFAULT">Unknown (Set to 0x21 for NoLighting, 0x11 for Water)</add>
+		<add name="Unknown Byte 0" type="byte" default="0">Unknown</add>
+		<add name="Unknown UShort 0" type="ushort" default="0" vercond="User Version &lt; 12">Unknown</add>
         <add name="Shader Flags" type="BSShaderFlags" default="0x82000000">Shader Property Flags</add>
         <add name="Unknown Short 1" type="ushort" vercond="User Version == 12">Unknown</add>
+        <add name="Unknown Float 0" type="float" default="0.0" vercond="User Version == 12">Unknown</add>
         <add name="Unknown Int 2" type="int" default="1">Unknown</add>
         <add name="Envmap Scale" type="float" default="1.0">Unknown</add>
-	    </niobject>
+    </niobject>
 
     <niobject name="BSShaderLightingProperty" abstract="1" inherit="BSShaderProperty">
         Bethesda-specific property.
-        <add name="Unknown Int 3" type="int" default="3">Unknown</add>
+        <add name="Unknown Int 3" type="int" default="3" vercond="(User Version &lt; 12)">Unknown</add>
+        <add name="Unknown Float 1" type="float" default="1" vercond="(User Version == 12)">Unknown</add>
     </niobject>
 
     <niobject name="BSShaderNoLightingProperty" abstract="0" inherit="BSShaderLightingProperty">
