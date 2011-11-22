@@ -2228,8 +2228,8 @@
         <add name="Unknown Byte" type="byte" default="255" userver="1">Cyanide extension (only in version 10.2.0.0?).</add>
         <add name="Unknown Integer 2" type="int" ver1="10.4.0.1" ver2="10.4.0.1">Unknown.</add>
         <add name="Dirty Flag" type="bool" ver1="20.2.0.7">Dirty Flag?</add>
-		<add name="Property Link 1" type="Ref" template="NiObject" ver1="20.2.0.7" userver="12"> Property Link 1</add>
-		<add name="Property Link 2" type="Ref" template="NiObject" ver1="20.2.0.7" userver="12"> Property Link 2</add>
+		<add name="Property Link 1" type="Ref" template="NiProperty" ver1="20.2.0.7" userver="12"> Property Link 1</add>
+		<add name="Property Link 2" type="Ref" template="NiProperty" ver1="20.2.0.7" userver="12"> Property Link 2</add>
     </niobject>
 
     <niobject name="NiTriBasedGeom" abstract="1" inherit="NiGeometry">
@@ -4245,9 +4245,9 @@
         <add name="Source Texture"  type="SizedString">points to an external texture.</add>
 
         <add name="Unknown Int 2" type="uint"> </add>
-        <add name="Unknown Floats 1" type="Matrix33">Not correct or finished, but it fits for now.</add>
+        <add name="Unknown Matrix 1" type="Matrix33">Not correct or finished, but it fits for now.</add>
         <add name="Unknown Float" type="float"> </add>
-        <add name="Source Texture"  type="SizedString">points to an external texture.</add>
+        <add name="Gradient Texture"  type="SizedString">points to an external texture.</add>
 		
 		
     </niobject>
