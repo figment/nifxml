@@ -4193,14 +4193,9 @@
 		<option value="31" name="SF_UNKNOWN_31">Unknown</option>
     </bitflags>
     
-    <niobject name="BSShaderProperty" abstract="0" inherit="NiObject">
+    <niobject name="BSShaderProperty" abstract="0" inherit="NiProperty">
         Bethesda-specific Property node
-		<add name="Unknown Flag" type="uint" ver1="20.2.0.7" vercond="User Version == 12">Unknown</add>
-		<add name="Name" type="string">Object Name</add>
-		<add name="Extra Data" type="Ref" template="NiExtraData" ver1="3.0" ver2="4.2.2.0" >Extra data object index. (The first in a chain)</add>
-        <add name="Num Extra Data List" type="uint" ver1="10.0.1.0">The number of Extra Data objects referenced through the list.</add>
-        <add name="Extra Data List" type="Ref" template="NiExtraData" arr1="Num Extra Data List" ver1="10.0.1.0">List of extra data indices.</add>
-        <add name="Controller" type="Ref" template="NiTimeController" ver1="3.0">Controller object index. (The first in a chain)</add>
+		<add name="Unknown Flag" type="uint" ver1="20.2.0.7" vercond="User Version == 12" is_manual_update="3">Unknown</add>
         <add name="Flags" type="Flags" default="1" >Unknown</add>
 		<add name="Shader Type" type="BSShaderType" default="SHADER_DEFAULT">Unknown (Set to 0x21 for NoLighting, 0x11 for Water)</add>
         <add name="Shader Flags" type="BSShaderFlags" default="0x82000000">Shader Property Flags</add>
