@@ -2818,10 +2818,10 @@
     <niobject name="NiPSysData" abstract="0" inherit="NiRotatingParticlesData">
         Particle system data.
         <add name="Particle Descriptions" type="ParticleDesc" arr1="Num Vertices" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version >= 11))">Unknown.</add>
-        <add name="Has Unknown Floats 3" type="bool" ver1="20.0.0.4" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version >= 11))">Unknown.</add>
-        <add name="Unknown Floats 3" type="float" arr1="Num Vertices" cond="Has Unknown Floats 3" ver1="20.0.0.4" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version >= 11))">Unknown.</add>
-        <add name="Unknown Short 1" type="ushort" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version == 11))">Unknown.</add>
-        <add name="Unknown Short 2" type="ushort" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version == 11))">Unknown.</add>
+        <add name="Has Rotation Speeds" type="bool" ver1="20.0.0.4" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version >= 11))">Has Rotation Speeds.</add>
+        <add name="Rotation Speeds" type="float" arr1="Num Vertices" cond="Has Rotation Speeds" ver1="20.0.0.4" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version >= 11))">Rotation Speeds</add>
+        <add name="Num Added Particles" type="ushort" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version == 11))">Num Added Particles</add>
+        <add name="Added Particles Base" type="ushort" vercond="!((Version >= 20.2.0.7) &amp;&amp; (User Version == 11))">Added Particles Base</add>
 
         <add name="Has Subtexture Offset UVs" type="bool" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">Boolean for Num Subtexture Offset UVs</add>
         <add name="Num Subtexture Offset UVs" type="uint" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">How many quads to use in BSPSysSubTexModifier for texture atlasing</add>
@@ -5949,11 +5949,8 @@
         <add name="Unknown 4 Bytes" type="byte" arr1="4">Unknown.</add>
 		<add name="Unknown Floats 1" type="Vector4">Unknown</add>
         <add name="Radius" type="float">A shell with that radius is added around the shape.</add>
-        <add name="Scale" type="float">Scale</add>
-        <add name="Unknown Float 3" type="float">Unknown</add>
-        <add name="Unknown Float 4" type="float">Unknown</add>
-        <add name="Unknown Float 5" type="float">Unknown</add>
-		<add name="Data" type="Ref" template="bhkCompressedMeshShapeData">The collision mesh data.</add>
+        <add name="Scale" type="Vector4">Scale</add>
+        <add name="Data" type="Ref" template="bhkCompressedMeshShapeData">The collision mesh data.</add>
     </niobject>
 
     <niobject name="bhkCompressedMeshShapeData" inherit="bhkRefObject">
