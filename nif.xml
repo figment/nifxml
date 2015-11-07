@@ -1214,6 +1214,23 @@
         <add name="Keys" type="ns keytbc" template="TEMPLATE" arr1="Num Keys" cond="Key Type == 3">Keys, interpolated with tension, bias, continuity.</add>
     </compound>
 
+    
+    <compound name="PosKey" niflibtype="Key" istemplate="1">
+        A special version of the key type used for posititions.  Never has tangents in Fallout 3. Type 1 is normal linear interpolation, type 2 has forward and backward tangents, and type 3 has tension, bias and continuity arguments. Note that color4 and byte always seem to be of type 1.
+        <add name="Time" type="float">Time of the key.</add>
+        <add name="Value" type="TEMPLATE">The key value.</add>
+        <add name="Forward" type="TEMPLATE" cond="ARG == 2" vercond="(Version &lt; 20.2.0.7) || (User Version &lt; 11)">Key forward tangent.</add>
+        <add name="Backward" type="TEMPLATE" cond="ARG == 2" vercond="(Version &lt; 20.2.0.7) || (User Version &lt; 11)">The key backward tangent.</add>
+        <add name="TBC" type="TBC" cond="ARG == 3">The key&#039;s TBC.</add>
+    </compound>
+    
+    <compound name="PosKeyGroup" istemplate="1"><!-- TEMPLATE should always be Vector3 -->
+        Array of vector keys (anything that can be interpolated, except rotations).
+        <add name="Num Keys" type="uint">Number of keys in the array.</add>
+        <add name="Interpolation" type="KeyType" cond="Num Keys != 0">The key type.</add>
+        <add name="Keys" type="Key" template="TEMPLATE" arg="Interpolation" arr1="Num Keys">The keys.</add>
+    </compound>
+   
     <compound name="QuatKey" niflibtype="Key" istemplate="1"><!-- TEMPLATE should always be Quaternion -->
         A special version of the key type used for quaternions.  Never has tangents.
         <add name="Time" type="float" ver2="10.1.0.0">Time the key applies.</add>
@@ -1690,9 +1707,8 @@
 	<compound name="bhkCMSDMaterial">
     per-chunk material, used in bhkCompressedMeshShapeData
 		<add name="Skyrim Material" type="SkyrimHavokMaterial">Material.</add>
-		<add name="Skyrim Layer" type="SkyrimLayer">Copy of Skyrim Layer from bhkRigidBody. The value is stored as 32-bit integer.</add>
-        <add name="Unknown 1" type="byte">Skyrim Layer is 32-bit int here.  This is padding.</add>
-        <add name="Unknown 2" type="ushort">Skyrim Layer is 32-bit int here.  This is padding.</add>
+		<add name="Skyrim Layer" type="SkyrimLayer">Copy of Skyrim Layer from bhkRigidBody</add>
+        <add name="Unknown Array" type="byte" arr1="3">This is padding.</add>
 	</compound>
 
     <compound name="bhkCMSDBigTris">
@@ -1700,8 +1716,8 @@
         <add name="Triangle 1" type="ushort"></add>
         <add name="Triangle 2" type="ushort"></add>
         <add name="Triangle 3" type="ushort"></add>
-		<add name="Unknown Int 1" type="uint">Always 0?</add>
-        <add name="Unknown Short 1" type="ushort"></add>
+		<add name="Material" type="uint">Material Index</add>
+        <add name="Welding Info" type="ushort">Welding Info</add>
     </compound>
     
     <compound name="bhkCMSDTransform">
@@ -1714,7 +1730,7 @@
     Defines subshape chunks in bhkCompressedMeshShapeData
 		<add name="Translation" type="Vector4">Local translation</add>
 		<add name="Material Index" type="uint">Index of material in bhkCompressedMeshShapeData::Chunk Materials</add>
-		<add name="Unknown Short 1" type="ushort">Always 65535?</add>
+		<add name="Reference" type="ushort" default="65535">Reference to another chunk - an index in the chunks list</add>
 		<add name="Transform Index" type="ushort">Index of transformation in bhkCompressedMeshShapeData::Chunk Transforms</add>
         <add name="Num Vertices" type="uint">Number of compressed vertices</add>
         <add name="Vertices" type="ushort" arr1="Num Vertices">Compressed vertices</add>
@@ -1722,8 +1738,8 @@
         <add name="Indices" type="ushort" arr1="Num Indices"></add>
         <add name="Num Strips" type="uint">Number of compressed strips</add>
         <add name="Strips" type="ushort" arr1="Num Strips">Compressed strips</add>
-        <add name="Num Indices 2" type="uint">Number of </add>
-        <add name="Indices 2" type="ushort" arr1="Num Indices 2">Compressed </add>
+        <add name="Num Weldings" type="uint">Number of welding info</add>
+        <add name="Weldings" type="ushort" arr1="Num Weldings">Welding info per triangle</add>
     </compound>
 
 <!-- nowhere used currently
@@ -2830,7 +2846,7 @@
         <add name="Unknown Int 4" type="uint" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">Unknown</add>
         <add name="Unknown Int 5" type="uint" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">Unknown</add>
         <add name="Unknown Int 6" type="uint" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">Unknown</add>
-        <add name="Unknown Short 3" type="ushort" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">Unknown</add>
+        <add name="Max BS Particles" type="ushort" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">Unknown</add>
         <add name="Unknown Byte 4" type="byte" vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12))">Unknown</add>
     </niobject>
     
@@ -3122,12 +3138,12 @@
 
     <niobject name="NiKeyframeData" abstract="0" inherit="NiObject">
         Keyframes for mesh animation.
-        <add name="Num Rotation Keys" type="uint">The number of quaternion rotation keys. If the rotation type is XYZ (type 4) then this *must* be set to 1, and in this case the actual number of keys is stored in the XYZ Rotations field.</add>
+        <add name="Num Rotation Keys" type="uint" calculated="1">The number of quaternion rotation keys. If the rotation type is XYZ (type 4) then this *must* be set to 1, and in this case the actual number of keys is stored in the XYZ Rotations field.</add>
         <add name="Rotation Type" type="KeyType" cond="Num Rotation Keys != 0">The type of interpolation to use for rotation.  Can also be 4 to indicate that separate X, Y, and Z values are used for the rotation instead of Quaternions.</add>
         <add name="Quaternion Keys" type="QuatKey" arg="Rotation Type" template="Quaternion" arr1="Num Rotation Keys" cond="Rotation Type != 4">The rotation keys if Quaternion rotation is used.</add>
         <add name="Unknown Float" type="float" cond="Rotation Type == 4" ver2="10.1.0.0">Possibly a vestigial time value?  Doesn&#039;t appear to be significant.</add>
         <add name="XYZ Rotations" type="KeyGroup" template="float" arr1="3" cond="Rotation Type == 4">Individual arrays of keys for rotating X, Y, and Z individually.</add>
-        <add name="Translations" type="KeyGroup" template="Vector3">Translation keys.</add>
+        <add name="Translations" type="PosKeyGroup" template="Vector3">Translation keys.</add>
         <add name="Scales" type="KeyGroup" template="float">Scale keys.</add>
     </niobject>
 
@@ -5945,25 +5961,28 @@
         Compressed collision mesh.
         <add name="Target" type="Ptr" template="NiAVObject">Points to root node?</add>
         <add name="Skyrim Material" type="SkyrimHavokMaterial">The shape&#039;s material.</add>
-        <add name="Unknown Float 1" type="float">Unknown.</add>
-        <add name="Unknown 4 Bytes" type="byte" arr1="4">Unknown.</add>
-		<add name="Unknown Floats 1" type="Vector4">Unknown</add>
+        <add name="Unknown Float 1" type="float" default="0.0050">Possibly radius</add>
+        <add name="Unknown Int 1" type="int">Unknown.</add>
+		<add name="Unknown Floats 1" type="Vector4" default="1.0,1.0,1.0,0.0">Unknown</add>
         <add name="Radius" type="float">A shell with that radius is added around the shape.</add>
-        <add name="Scale" type="Vector4">Scale</add>
-        <add name="Data" type="Ref" template="bhkCompressedMeshShapeData">The collision mesh data.</add>
+        <add name="Scale" type="float" default="1.0">Scale</add>
+		<add name="Unknown Float 3" type="float" default="1.0">Unknown</add>
+        <add name="Unknown Float 4" type="float" default="1.0">Unknown</add>
+        <add name="Unknown Float 5" type="float">Unknown</add>
+		<add name="Data" type="Ref" template="bhkCompressedMeshShapeData">The collision mesh data.</add>
     </niobject>
 
     <niobject name="bhkCompressedMeshShapeData" inherit="bhkRefObject">
          A compressed mesh shape for collision in Skyrim.
-		<add name="Bits Per Index" type="uint">Number of bits in the shape-key reserved for a triangle index</add>
-		<add name="Bits Per W Index" type="uint">Number of bits in the shape-key reserved for a triangle index and its winding</add>
-		<add name="Mask W Index" type="uint">Mask used to get the triangle index and winding from a shape-key (common: 262143 = 0x3ffff)</add>
-		<add name="Mask Index" type="uint">Mask used to get the triangle index from a shape-key (common: 131071 = 0x1ffff)</add>
-		<add name="Error" type="float">The radius of the storage mesh shape? Quantization error?</add>
+		<add name="Bits Per Index" type="uint" default="17">Number of bits in the shape-key reserved for a triangle index</add>
+		<add name="Bits Per W Index" type="uint" default="18">Number of bits in the shape-key reserved for a triangle index and its winding</add>
+		<add name="Mask W Index" type="uint" default="262143">Mask used to get the triangle index and winding from a shape-key (common: 262143 = 0x3ffff)</add>
+		<add name="Mask Index" type="uint" default="131071">Mask used to get the triangle index from a shape-key (common: 131071 = 0x1ffff)</add>
+		<add name="Error" type="float" default="0.0010">The radius of the storage mesh shape? Quantization error?</add>
 		<add name="Bounds Min" type="Vector4">The minimum boundary of the AABB (the coordinates of the corner with the lowest numerical values)</add>
 		<add name="Bounds Max" type="Vector4">The maximum boundary of the AABB (the coordinates of the corner with the highest numerical values)</add>
 		<add name="Unknown Byte 1" type="byte">Unknown</add>
-		<add name="Unknown Int 3" type="uint">Unknown</add>
+		<add name="Unknown Int 3" type="uint" default="1">Unknown</add>
         <add name="Unknown Int 4" type="uint">Unknown</add>
         <add name="Unknown Int 5" type="uint">Unknown</add>
 		<add name="Unknown Byte 2" type="byte">Unknown</add>
