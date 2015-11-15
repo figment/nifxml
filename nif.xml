@@ -1025,15 +1025,15 @@
 
     <compound name="HalfVector3">
         A vector in 3D space (x,y,z).
-        <add name="x" type="hfloat">First coordinate.</add>  <!-- Needs Half Float Type -->
-        <add name="y" type="hfloat">Second coordinate.</add>  <!-- Needs Half Float Type -->
-        <add name="z" type="hfloat">Third coordinate.</add>  <!-- Needs Half Float Type -->
+        <add name="x" type="hfloat">First coordinate.</add>  
+        <add name="y" type="hfloat">Second coordinate.</add>  
+        <add name="z" type="hfloat">Third coordinate.</add>  
     </compound>
 
     <compound name="HalfTexCoord">
         Texture coordinates (u,v).
-        <add name="u" type="hfloat">First coordinate.</add>  <!-- Needs Half Float Type -->
-        <add name="v" type="hfloat">Second coordinate.</add>  <!-- Needs Half Float Type -->
+        <add name="u" type="hfloat">First coordinate.</add>  
+        <add name="v" type="hfloat">Second coordinate.</add>  
     </compound>
     
     <compound name="MipMap">
@@ -1604,7 +1604,7 @@
         <add name="Unknown 4 Halfs" type="hfloat" cond="ARG &gt;= 8" arr1="4" />
         <add name="Unknown 4 Bytes" type="byte" cond="ARG &gt;= 8" arr1="4" />
         <add name="Unknown Int 1" type="uint" cond="ARG == 9" />
-        <add name="Unknown 2 Ints 2" type="uint" cond="ARG == 10" />
+        <add name="Unknown 2 Ints 2" type="uint" cond="ARG == 10" arr1="2"/>
     </compound>
 
     
@@ -2256,9 +2256,9 @@
         <add name="Data Layers" type="OblivionColFilter" arr1="Num Data Layers">Havok Layers for each strip data.</add>
     </niobject>
 
-    <niobject name="NiExtraData" abstract="1" inherit="NiObject">
+    <niobject name="NiExtraData" abstract="0" inherit="NiObject">
         A generic extra data object.
-        <add name="Name" type="string" ver1="10.0.1.0">Name of this object.</add>
+        <add name="Name" type="string" ver1="10.0.1.0" cond="!BSExtraData">Name of this object.</add>
         <add name="Next Extra Data" type="Ref" template="NiExtraData" ver2="4.2.2.0">Block number of the next extra data object.</add>
     </niobject>
 
@@ -3371,10 +3371,10 @@
 		<add name="Unknown Int 1" type="uint" vercond="User Version >= 12">Unknown</add>
         <add name="Unknown Integer 3" type="int" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Unknown</add>
         <add name="Unknown Integer 4" type="int" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Unknown</add>   
-        <add name="Data?" type="Ptr" template="NiPSysData" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Unknown</add>   
+        <add name="Data?" type="Ref" template="NiPSysData" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Unknown</add>   
 		<add name="World Space" type="bool" ver1="10.1.0.0">If true, Particles are birthed into world space.  If false, Particles are birthed into object space.</add>
         <add name="Num Modifiers" type="uint" ver1="10.1.0.0">The number of modifier references.</add>
-        <add name="Modifiers" type="Ptr" template="NiPSysModifier" arr1="Num Modifiers" ver1="10.1.0.0">The list of particle modifiers.</add>
+        <add name="Modifiers" type="Ref" template="NiPSysModifier" arr1="Num Modifiers" ver1="10.1.0.0">The list of particle modifiers.</add>
     </niobject>
 
     <niobject name="NiMeshParticleSystem" abstract="0" inherit="NiParticleSystem">
@@ -3636,7 +3636,7 @@
     <niobject name="NiPSysMeshEmitter" abstract="0" inherit="NiPSysEmitter">
         Particle emitter that uses points on a specified mesh to emit from.
         <add name="Num Emitter Meshes" type="uint">The number of references to emitter meshes that follow.</add>
-        <add name="Emitter Meshes" type="Ref" template="NiTriBasedGeom" arr1="Num Emitter Meshes">Links to meshes used for emitting.</add>
+        <add name="Emitter Meshes" type="Ref" template="NiAVObject" arr1="Num Emitter Meshes">Links to meshes used for emitting.</add>
         <add name="Initial Velocity Type" type="VelocityType">The way the particles get their initial direction and speed.</add>
         <add name="Emission Type" type="EmitFrom">The parts of the mesh that the particles emit from.</add>
         <add name="Emission Axis" type="Vector3">The emission axis.</add>
@@ -4706,7 +4706,7 @@
         <add name="Byte 1" type="byte">Unknown</add>
         <add name="Byte 2" type="byte">Unknown</add>
         <add name="Byte 3" type="byte">Unknown</add>
-        <add name="Interpolator 10?" type="Ref" template="NiInterpolator">Unknown, unsure if this is actually another interpolator link.</add>
+        <add name="Interpolator 10?" type="Ref" template="NiObject">Unknown, unsure if this is actually another interpolator link.</add>
 	</niobject>
 
    <niobject name="BSShaderTextureSet" abstract="0" inherit="NiObject">
@@ -6122,13 +6122,13 @@
         <add name="VertexFlag8" type="byte" />
         <add name="Num Triangles" type="uint" />
         <add name="Num Vertices" type="ushort"/>
-        <add name="Data Size" type="uint" />
     </niobject>
 
     <niobject name="BSTriShape" inherit="BSShape">
         Fallout 4
-        <add name="Vertex Data" type="BSVertexData" arr1="Num Vertices" arg="VertexFlag1" />
-        <add name="Triangles" type="Triangle" arr1="Num Triangles" />
+        <add name="Data Size" type="uint" />
+        <add name="Vertex Data" type="BSVertexData" arr1="Num Vertices" arg="VertexFlag1" cond="Data Size &gt; 0"/>
+        <add name="Triangles" type="Triangle" arr1="Num Triangles" cond="Data Size &gt; 0" />
     </niobject>
 
     <compound name="SubIndexRecordA">
@@ -6142,7 +6142,7 @@
         <add name="Unknown Int 1" type="uint" />
         <add name="Unknown Int 2" type="uint" />
         <add name="Unknown Int 3" type="uint" />
-        <add name="Num Records" type="uint" arr1="NumA2" />
+        <add name="Num Records" type="uint" />
         <add name="Sub Index Record" type="SubIndexRecordA" arr1="Num Records" />
     </compound>
 
@@ -6166,11 +6166,11 @@
 
     <niobject name="BSSubIndexTriShape" inherit="BSTriShape">
         Fallout 4
-        <add name="Num Triangles 2" type="uint" />
-        <add name="NumA" type="uint" />
-        <add name="NumB" type="uint" />
-        <add name="Sub Index Part 1" type="SubIndexPart1" arr1="NumA" />
-        <add name="Sub Index Part 2" type="SubIndexPart2" cond="NumA &lt; NumB" />
+        <add name="Num Triangles 2" type="uint" cond="Data Size &gt; 0"/>
+        <add name="NumA" type="uint" cond="Data Size &gt; 0"/>
+        <add name="NumB" type="uint" cond="Data Size &gt; 0"/>
+        <add name="Sub Index Part 1" type="SubIndexPart1" arr1="NumA" cond="Data Size &gt; 0"/>
+        <add name="Sub Index Part 2" type="SubIndexPart2" cond="(NumA &lt; NumB) &amp;&amp; (Data Size &gt; 0)" />
     </niobject>
 
     <niobject name="BSMeshLODTriShape" inherit="BSTriShape">
@@ -6185,19 +6185,23 @@
         <add name="Unknown Int 2" type="uint">Unknown.</add>
     </niobject>
 
-    <niobject name="bhkPhysicsSystem" inherit="bhkSerializable">
+    <niobject name="BSExtraData" inherit="NiExtraData">
+        Fallout 4 Extra Data (without name)
+    </niobject>
+    
+    <niobject name="bhkPhysicsSystem" inherit="BSExtraData">
         Fallout 4 Collision System
         <add name="Num Bytes" type="uint" />
         <add name="Data" type="byte" nifskopetype="blob" arr1="Num Bytes" />
     </niobject>
 
-    <niobject name="bhkRagdollSystem" inherit="bhkSerializable">
+    <niobject name="bhkRagdollSystem" inherit="BSExtraData">
         Fallout 4 Ragdoll System
         <add name="Num Bytes" type="uint" />
         <add name="Data" type="byte" nifskopetype="blob" arr1="Num Bytes" />
     </niobject>
 
-    <niobject name="BSClothExtraData" inherit="bhkSerializable">
+    <niobject name="BSClothExtraData" inherit="BSExtraData">
         Fallout 4 Cloth data
         <add name="Num Bytes" type="uint" />
         <add name="Data" type="byte" nifskopetype="blob" arr1="Num Bytes" />
@@ -6216,7 +6220,7 @@
         <add name="Unknown Int 1" type="uint" />
         <add name="Bone Data" type="Ref" template="BSSkin::BoneData" />
         <add name="Num Bones" type="uint" />
-        <add name="Bones" type="Ref" arr1="Num Bones" />
+        <add name="Bones" type="Ptr" arr1="Num Bones" />
         <add name="Num Vector3 1" type="uint" />
         <add name="Vector3 1" type="Vector3" arr1="Num Vector3 1" />
     </niobject>
@@ -6227,9 +6231,8 @@
         <add name="Bones" type="BSSkinBoneTrans" arr1="Num Bones" />
     </niobject>
 
-    <niobject name="BSPositionData">
+    <niobject name="BSPositionData" inherit="NiExtraData">
         Fallout 4 Positional Data
-        <add name="Name" type="StringIndex" />
         <add name="Num Data" type="uint" />
         <add name="Data" type="hfloat" arr1="Num Data" />
     </niobject>
@@ -6243,19 +6246,23 @@
         <add name="Unknown 4 Floats" type="float" arr1="4" />
     </compound>
 
-    <niobject name="BSConnectPoint::Parents">
+    <niobject name="BSConnectPoint::Parents" inherit="NiExtraData">
         Fallout 4 Weapon Slot Parent?
-        <add name="Name" type="StringIndex" />
         <add name="Num Connect Points" type="uint" />
         <add name="Connect Points" type="BSConnectPoint" arr1="Num Connect Points" />
     </niobject>
 
-    <niobject name="BSConnectPoint::Children">
+    <niobject name="BSConnectPoint::Children" inherit="NiExtraData">
         Fallout 4 Weapon Slot Child?
-        <add name="Name" type="StringIndex" />
         <add name="Unknown Byte" type="byte" />
         <add name="Num Targets" type="int" />
         <add name="Target" type="SizedString" arr1="Num Targets" />
+    </niobject>
+
+    <niobject name="BSEyeCenterExtraData" inherit="NiExtraData">
+        Fallout 4 eye center data
+        <add name="Num Data" type="int" />
+        <add name="Data" type="float" arr1="Num Data" />
     </niobject>
 
 </niftoolsxml>
