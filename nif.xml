@@ -1135,7 +1135,6 @@
         <add name="Creator" type="ShortString">Could be the name of the creator of the NIF file?</add>
         <add name="Export Info 1" type="ShortString">Unknown. Can be something like &#039;TriStrip Process Script&#039;.</add>
         <add name="Export Info 2" type="ShortString">Unknown. Possibly the selected option of the export script. Can be something like &#039;Default Export Script&#039;.</add>
-        <add name="Export Info 3" type="ShortString"  vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12) &amp;&amp; (User Version 2 &gt;= 130))"/>
     </compound>
 
     <!-- Don't use vercond in Header, it breaks niflib -->
@@ -1151,6 +1150,7 @@
         <add name="Unknown Int 3" type="uint" default="0" ver1="30.0.0.2">Unknown. Possibly User Version 2?</add>
         <add name="Export Info" type="ExportInfo" ver1="10.0.1.2" ver2="10.0.1.2" />
         <add name="Export Info" type="ExportInfo" ver1="10.1.0.0" cond="(User Version &gt;= 10) || ((User Version == 1) &amp;&amp; (Version != 10.2.0.0))" />
+        <add name="Export Info 3" type="ShortString"  cond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12) &amp;&amp; (User Version 2 &gt;= 130))"/>
         <add name="Num Block Types" type="ushort" ver1="10.0.1.0">Number of object types in this NIF file.</add>
         <add name="Block Types" type="SizedString" arr1="Num Block Types" ver1="10.0.1.0">List of all object types used in this NIF file.</add>
         <add name="Block Type Index" type="BlockTypeIndex" arr1="Num Blocks" ver1="10.0.1.0">Maps file objects on their corresponding type: first file object is of type object_types[object_type_index[0]], the second of object_types[object_type_index[1]], etc.</add>
@@ -2668,9 +2668,8 @@
     <niobject name="NiGeometry" abstract="1" inherit="NiAVObject">
         Describes a visible scene element with vertices like a mesh, a particle system, lines, etc.
         <add name="Data" type="Ref" template="NiGeometryData" cond="!NiParticleSystem">Data index (NiTriShapeData/NiTriStripData).</add>
-        <add name="Data" type="uint" template="NiGeometryData" cond="NiParticleSystem">Data index (NiTriShapeData/NiTriStripData).</add>
         <add name="Skin Instance" type="Ref" template="NiSkinInstance" ver1="3.3.0.13" cond="!NiParticleSystem">Skin instance index.</add>
-        <add name="Skin Instance" type="uint" template="NiSkinInstance" ver1="3.3.0.13" cond="NiParticleSystem">Skin instance index.</add>
+        <add name="Empty Refs" type="uint" arr1="2" cond="NiParticleSystem">Placeholder for Skin and data for NiParticleSystem</add>
         <add name="Num Materials" type="uint" ver1="20.2.0.7">Num Materials</add>
         <add name="Material Name" type="string" arr1="Num Materials" ver1="20.2.0.7">Unknown string.  Shader?</add>
         <add name="Material Extra Data" type="int" arr1="Num Materials" ver1="20.2.0.7">Unknown integer; often -1. (Is this a link, array index?)</add>
@@ -6109,8 +6108,12 @@
 <!-- - - - - - - -->
     <niobject name="BSShape" abstract="1" inherit="NiAVObject">
         Fallout 4
+    </niobject>
+
+    <niobject name="BSTriShape" inherit="BSShape">
+        Fallout 4
         <add name="Unknown 4 Floats" type="float" arr1="4" />
-        <add name="Skin" type="Ref" />
+        <add name="Skin" type="Ref" template="NiObject" />
         <add name="BS Properties" type="Ref" template="NiProperty" arr1="2" />
         <add name="VertexFlag1" type="byte" />
         <add name="VertexFlag2" type="byte" />
@@ -6122,10 +6125,6 @@
         <add name="VertexFlag8" type="byte" />
         <add name="Num Triangles" type="uint" />
         <add name="Num Vertices" type="ushort"/>
-    </niobject>
-
-    <niobject name="BSTriShape" inherit="BSShape">
-        Fallout 4
         <add name="Data Size" type="uint" />
         <add name="Vertex Data" type="BSVertexData" arr1="Num Vertices" arg="VertexFlag1" cond="Data Size &gt; 0"/>
         <add name="Triangles" type="Triangle" arr1="Num Triangles" cond="Data Size &gt; 0" />
@@ -6215,17 +6214,17 @@
         <add name="Scale" type="float" />
     </compound>
 
-    <niobject name="BSSkin::Instance">
+    <niobject name="BSSkin::Instance" inherit="NiObject">
         Fallout 4 Skin Instance
         <add name="Unknown Int 1" type="uint" />
         <add name="Bone Data" type="Ref" template="BSSkin::BoneData" />
         <add name="Num Bones" type="uint" />
-        <add name="Bones" type="Ptr" arr1="Num Bones" />
+        <add name="Bones" type="Ptr" template="NiNode" arr1="Num Bones" />
         <add name="Num Vector3 1" type="uint" />
         <add name="Vector3 1" type="Vector3" arr1="Num Vector3 1" />
     </niobject>
 
-    <niobject name="BSSkin::BoneData">
+    <niobject name="BSSkin::BoneData" inherit="NiObject">
         Fallout 4 Bone Data
         <add name="Num Bones" type="uint" />
         <add name="Bones" type="BSSkinBoneTrans" arr1="Num Bones" />
