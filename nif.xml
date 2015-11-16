@@ -1135,7 +1135,7 @@
         <add name="Creator" type="ShortString">Could be the name of the creator of the NIF file?</add>
         <add name="Export Info 1" type="ShortString">Unknown. Can be something like &#039;TriStrip Process Script&#039;.</add>
         <add name="Export Info 2" type="ShortString">Unknown. Possibly the selected option of the export script. Can be something like &#039;Default Export Script&#039;.</add>
-        <add name="Export Info 3" type="ShortString"  vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12) &amp;&amp; (User Version 2 >= 130))"/>
+        <add name="Export Info 3" type="ShortString"  vercond="((Version >= 20.2.0.7) &amp;&amp; (User Version >= 12) &amp;&amp; (User Version 2 &gt;= 130))"/>
     </compound>
 
     <!-- Don't use vercond in Header, it breaks niflib -->
@@ -2681,7 +2681,7 @@
         <add name="Unknown Byte" type="byte" default="255" userver="1">Cyanide extension (only in version 10.2.0.0?).</add>
         <add name="Unknown Integer 2" type="int" ver1="10.4.0.1" ver2="10.4.0.1">Unknown.</add>
         <add name="Dirty Flag" type="bool" ver1="20.2.0.7" vercond="User Version 2 &lt; 130">Dirty Flag?</add>
-        <add name="Unknown Integer 3" type="int" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Dirty Flag?</add>
+        <add name="Unknown Integer 3" type="int" vercond="(User Version >= 12) &amp;&amp; (User Version 2 &gt;= 130)">Dirty Flag?</add>
         <add name="BS Properties" type="Ref" template="NiProperty" arr1="2" ver1="20.2.0.7" userver="12">Two property links, used by Bethesda.</add>
     </niobject>
 
@@ -3226,8 +3226,8 @@
         Generic node object for grouping.
         <add name="Num Children" type="uint">The number of child objects.</add>
         <add name="Children" type="Ref" template="NiAVObject" arr1="Num Children">List of child node object indices.</add>
-        <add name="Num Effects" type="uint"vercond="!((User Version == 12) &amp;&amp; (User Version 2 >= 130))">The number of references to effect objects that follow.</add>
-        <add name="Effects" type="Ref" template="NiDynamicEffect" arr1="Num Effects"vercond="!((User Version == 12) &amp;&amp; (User Version 2 >= 130))">List of node effects. ADynamicEffect?</add>
+        <add name="Num Effects" type="uint" vercond="!((User Version == 12) &amp;&amp; (User Version 2 &gt;= 130))">The number of references to effect objects that follow.</add>
+        <add name="Effects" type="Ref" template="NiDynamicEffect" arr1="Num Effects" vercond="!((User Version == 12) &amp;&amp; (User Version 2 &gt;= 130))">List of node effects. ADynamicEffect?</add>
     </niobject>
 
     <niobject name="NiBone" abstract="0" inherit="NiNode">
@@ -3369,9 +3369,9 @@
 		<add name="Unknown Short 2" type="ushort" vercond="User Version >= 12">Unknown</add>
 		<add name="Unknown Short 3" type="ushort" vercond="User Version >= 12">Unknown</add>
 		<add name="Unknown Int 1" type="uint" vercond="User Version >= 12">Unknown</add>
-        <add name="Unknown Integer 3" type="int" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Unknown</add>
-        <add name="Unknown Integer 4" type="int" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Unknown</add>   
-        <add name="Data?" type="Ref" template="NiPSysData" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 >= 130)">Unknown</add>   
+        <add name="Unknown Integer 3" type="int" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 &gt;= 130)">Unknown</add>
+        <add name="Unknown Integer 4" type="int" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 &gt;= 130)">Unknown</add>   
+        <add name="Data?" type="Ref" template="NiPSysData" ver1="20.2.0.7" vercond="(User Version >= 12) &amp;&amp; (User Version 2 &gt;= 130)">Unknown</add>   
 		<add name="World Space" type="bool" ver1="10.1.0.0">If true, Particles are birthed into world space.  If false, Particles are birthed into object space.</add>
         <add name="Num Modifiers" type="uint" ver1="10.1.0.0">The number of modifier references.</add>
         <add name="Modifiers" type="Ref" template="NiPSysModifier" arr1="Num Modifiers" ver1="10.1.0.0">The list of particle modifiers.</add>
