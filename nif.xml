@@ -1609,19 +1609,18 @@
 
     <compound name="BSVertexData">
         <add name="Vertex" type="HalfVector3" />
-        <add name="Unknown Dot" type="hfloat" />
-        <add name="Unknown Int 1" type="uint" cond="ARG == 3" />
-        <add name="UV" type="HalfTexCoord" cond="ARG &gt; 4" />
-        <add name="Normal" type="ByteVector3" cond="((ARG &gt; 3) &amp;&amp; (ARG != 7))" />
-        <add name="Unknown Byte 1" type="byte" cond="((ARG &gt; 3) &amp;&amp; (ARG != 7))" />
-        <add name="Tangent" type="ByteVector3" cond="((ARG &gt; 3) &amp;&amp; (ARG != 7))" />
-        <add name="Unknown Byte 2" type="byte" cond="((ARG &gt; 3) &amp;&amp; (ARG != 7))" />
-        <add name="Vertex Colors" type="ByteColor4" cond="((ARG == 6) || (ARG == 7) || (ARG == 9) || (ARG == 10))" />
-        <add name="Bone Weights" type="hfloat" cond="ARG &gt; 6" arr1="4" />
-        <add name="Bone Indices" type="byte" cond="ARG &gt; 6" arr1="4" />
-        <add name="Unknown Int 2" type="uint" cond="ARG == 10" />
+        <add name="Bitangent x" type="hfloat" cond="(ARG[5] &amp; 0x80) &amp;&amp; (ARG[2] &amp; 0x40)" />
+        <add name="Unknown Short 1" type="uint" cond="!((ARG[5] &amp; 0x80) &amp;&amp; (ARG[2] &amp; 0x40))">Normal nybble?</add>
+        <add name="UV" type="HalfTexCoord" cond="ARG[5] &amp; 0x20" />
+        <add name="Normal" type="ByteVector3" cond="ARG[5] &amp; 0x80" />
+        <add name="Bitangent y" type="char" cond="ARG[5] &amp; 0x80" />
+        <add name="Tangent" type="ByteVector3" cond="ARG[2] &amp; 0x40" />
+        <add name="Bitangent z" type="char" cond="ARG[2] &amp; 0x40" />
+        <add name="Vertex Colors" type="ByteColor4" cond="ARG[6] &amp; 0x02" />
+        <add name="Bone Weights" type="hfloat" cond="ARG[6] &amp; 0x04" arr1="4" />
+        <add name="Bone Indices" type="byte" cond="ARG[6] &amp; 0x04" arr1="4" />
+        <add name="Unknown Int 2" type="uint" cond="ARG[6] &amp; 0x10" />
     </compound>
-
     
     <enum name="ImageType" storage="uint">
         Determines how the raw image data is stored in NiRawImageData.
@@ -6130,18 +6129,11 @@
         <add name="Unknown 4 Floats" type="float" arr1="4" />
         <add name="Skin" type="Ref" template="NiObject" />
         <add name="BS Properties" type="Ref" template="NiProperty" arr1="2" />
-        <add name="VertexFlag1" type="byte" />
-        <add name="VertexFlag2" type="byte" />
-        <add name="VertexFlag3" type="byte" />
-        <add name="VertexFlag4" type="byte" />
-        <add name="VertexFlag5" type="byte" />
-        <add name="VertexFlag6" type="byte" />
-        <add name="VertexFlag7" type="byte" />
-        <add name="VertexFlag8" type="byte" />
+        <add name="Vertex Flags" type="byte" arr1="8"/>
         <add name="Num Triangles" type="uint" />
         <add name="Num Vertices" type="ushort"/>
         <add name="Data Size" type="uint" />
-        <add name="Vertex Data" type="BSVertexData" arr1="Num Vertices" arg="VertexFlag1" cond="Data Size &gt; 0"/>
+        <add name="Vertex Data" type="BSVertexData" arr1="Num Vertices" arg="Vertex Flags" cond="Data Size &gt; 0"/>
         <add name="Triangles" type="Triangle" arr1="Num Triangles" cond="Data Size &gt; 0" />
     </niobject>
 
