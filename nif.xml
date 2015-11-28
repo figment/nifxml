@@ -1609,17 +1609,17 @@
 
     <compound name="BSVertexData">
         <add name="Vertex" type="HalfVector3" />
-        <add name="Bitangent x" type="hfloat" cond="(ARG[5] &amp; 0x80) &amp;&amp; (ARG[2] &amp; 0x40)" />
-        <add name="Unknown Short 1" type="uint" cond="!((ARG[5] &amp; 0x80) &amp;&amp; (ARG[2] &amp; 0x40))">Normal nybble?</add>
-        <add name="UV" type="HalfTexCoord" cond="ARG[5] &amp; 0x20" />
-        <add name="Normal" type="ByteVector3" cond="ARG[5] &amp; 0x80" />
-        <add name="Bitangent y" type="char" cond="ARG[5] &amp; 0x80" />
-        <add name="Tangent" type="ByteVector3" cond="ARG[2] &amp; 0x40" />
-        <add name="Bitangent z" type="char" cond="ARG[2] &amp; 0x40" />
-        <add name="Vertex Colors" type="ByteColor4" cond="ARG[6] &amp; 0x02" />
-        <add name="Bone Weights" type="hfloat" cond="ARG[6] &amp; 0x04" arr1="4" />
-        <add name="Bone Indices" type="byte" cond="ARG[6] &amp; 0x04" arr1="4" />
-        <add name="Unknown Int 2" type="uint" cond="ARG[6] &amp; 0x10" />
+        <add name="Bitangent x" type="hfloat" cond="(ARG[5] &amp; 128) &amp;&amp; (ARG[2] &amp; 64)" />
+        <add name="Unknown Short 1" type="uint" cond="!((ARG[5] &amp; 128) &amp;&amp; (ARG[2] &amp; 64))">Normal nybble?</add>
+        <add name="UV" type="HalfTexCoord" cond="ARG[5] &amp; 32" />
+        <add name="Normal" type="ByteVector3" cond="ARG[5] &amp; 128" />
+        <add name="Bitangent y" type="char" cond="ARG[5] &amp; 128" />
+        <add name="Tangent" type="ByteVector3" cond="ARG[2] &amp; 64" />
+        <add name="Bitangent z" type="char" cond="ARG[2] &amp; 64" />
+        <add name="Vertex Colors" type="ByteColor4" cond="ARG[6] &amp; 2" />
+        <add name="Bone Weights" type="hfloat" cond="ARG[6] &amp; 4" arr1="4" />
+        <add name="Bone Indices" type="byte" cond="ARG[6] &amp; 4" arr1="4" />
+        <add name="Unknown Int 2" type="uint" cond="ARG[6] &amp; 16" />
     </compound>
     
     <enum name="ImageType" storage="uint">
@@ -6132,7 +6132,7 @@
         <add name="Vertex Flags" type="byte" arr1="8"/>
         <add name="Num Triangles" type="uint" />
         <add name="Num Vertices" type="ushort"/>
-        <add name="Data Size" type="uint" />
+        <add name="Data Size" type="uint" calculated="1"/>
         <add name="Vertex Data" type="BSVertexData" arr1="Num Vertices" arg="Vertex Flags" cond="Data Size &gt; 0"/>
         <add name="Triangles" type="Triangle" arr1="Num Triangles" cond="Data Size &gt; 0" />
     </niobject>
@@ -6214,8 +6214,8 @@
     </niobject>
 
     <compound name="BSSkinBoneTrans">
-        <add name="Bounding Sphere?" type="Vector3" />
-        <add name="Radius?" type="float" />
+        <add name="BS Center" type="Vector3" >Bounding Sphere Center</add>
+        <add name="BS Radius" type="float" >Bounding Sphere Radius</add>
         <add name="Rotation" type="Matrix33" />
         <add name="Translation" type="Vector3" />
         <add name="Scale" type="float" />
