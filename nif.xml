@@ -4788,6 +4788,7 @@
         <option value="5" name="SLSF1_Greyscale_To_PaletteAlpha">in EffectShaderProperty</option>
         <option value="6" name="SLSF1_Use_Falloff">Use Falloff value in EffectShaderProperty</option>
         <option value="7" name="SLSF1_Environment_Mapping">Environment mapping (uses Envmap Scale).</option>
+
         <option value="8" name="SLSF1_Recieve_Shadows">Object can recieve shadows.</option>
         <option value="9" name="SLSF1_Cast_Shadows">Can cast shadows</option>
         <option value="10" name="SLSF1_Facegen_Detail_Map">Use a face detail map in the 4th texture slot.</option>
@@ -4796,6 +4797,7 @@
         <option value="13" name="SLSF1_Non_Projective_Shadows">Unknown.</option>
         <option value="14" name="SLSF1_Landscape">Unknown.</option>
         <option value="15" name="SLSF1_Refraction">Use normal map for refraction effect.</option>
+        
         <option value="16" name="SLSF1_Fire_Refraction"></option>
         <option value="17" name="SLSF1_Eye_Environment_Mapping">Eye Environment Mapping (Must use the Eye shader and the model must be skinned)</option>
         <option value="18" name="SLSF1_Hair_Soft_Lighting">Keeps from going too bright under lights (hair shader only)</option>
@@ -4804,6 +4806,7 @@
         <option value="21" name="SLSF1_FaceGen_RGB_Tint">Use tintmask for Face.</option>
         <option value="22" name="SLSF1_Own_Emit">Provides its own emittance color. (will not absorb light/ambient color?)</option>
         <option value="23" name="SLSF1_Projected_UV">Used for decalling?</option>
+        
         <option value="24" name="SLSF1_Multiple_Textures"></option>
         <option value="25" name="SLSF1_Remappable_Textures"></option>
         <option value="26" name="SLSF1_Decal"></option>
@@ -4859,16 +4862,26 @@
         <add name="Texture Set" type="Ref" template="BSShaderTextureSet">Texture Set, can have override in an esm/esp</add>
         <add name="Emissive Color" type="Color3">Glow color and alpha</add>
         <add name="Emissive Multiple" type="float">Multiplied emissive colors</add>
-        <add name="Wet Material" type="uint" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+        <add name="Root Material" type="string" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
         <add name="Texture Clamp Mode" type="TexClampMode">How to handle texture borders.</add>
         <add name="Alpha" type="float" default="1.0">The materials opacity (1=non-transparent).</add>
         <add name="Refraction Strength" type="float">Refraction strength increases as value increases</add>
         <add name="Glossiness" type="float">The material&#039;s specular power, or glossiness (0-999).</add>
         <add name="Specular Color" type="Color3">Adds a colored highlight.</add>
         <add name="Specular Strength" type="float" default="1.0">Brightness of specular highlight. (0=not visible) (0-999)</add>
-        <add name="Lighting Effect 1" type="float">Controls strength for envmap/backlight/rim/softlight lighting effect?</add>
-        <add name="Lighting Effect 2" type="float">Controls strength for envmap/backlight/rim/softlight lighting effect?</add>
-        <add name="Unknown Floats 1" type="float" arr1="9" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)">Fallout 4 Unknown</add>
+        <add name="Lighting Effect 1" type="float" vercond="User Version 2 &lt; 130">Controls strength for envmap/backlight/rim/softlight lighting effect?</add>
+        <add name="Lighting Effect 2" type="float" vercond="User Version 2 &lt; 130">Controls strength for envmap/backlight/rim/softlight lighting effect?</add>
+		<add name="Subsurface Rolloff" type="float"  vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+        <add name="Unknown Float 1" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+		<add name="Backlight Power" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+        <add name="Grayscale To Palette Scale" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)">GrayscaleToPaletteScale</add>
+        <add name="Fresnel Power" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)">Fresnel Power</add>
+		<add name="Wetness Spec Scale" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+		<add name="Wetness Spec Power" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+		<add name="Wetness Min Var" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+		<add name="Wetness Env Map Scale" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+		<add name="Wetness Fresnel Power" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+		<add name="Wetness Metalness" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
         <add name="Environment Map Scale" type="float" cond="Skyrim Shader Type == 1">Scales the intensity of the environment/cube map. (0-1)</add>
         <add name="Unknown EMap Int 1" type="ushort" cond="Skyrim Shader Type == 1" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)">Unknown</add>
         <add name="Skin Tint Color" type="Color3" cond="Skyrim Shader Type == 5">Tints the base texture. Overridden by game settings.</add>
@@ -4894,18 +4907,18 @@
         <add name="UV Scale" type="TexCoord" default="1.0, 1.0">Offset UV Scale to repeat tiling textures</add>
         <add name="Source Texture"  type="SizedString">points to an external texture.</add>
         <add name="Texture Clamp Mode" type="uint">How to handle texture borders.</add>
-        <add name="Falloff Start Angle" type="float" default="1.0" vercond="User Version 2 &lt; 130">At this cosine of angle falloff will be equal to Falloff Start Opacity</add>
-        <add name="Falloff Stop Angle" type="float" default="1.0" vercond="User Version 2 &lt; 130">At this cosine of angle falloff will be equal to Falloff Stop Opacity</add>
-        <add name="Falloff Start Opacity" type="float" vercond="User Version 2 &lt; 130">Alpha falloff multiplier at start angle</add>
-        <add name="Falloff Stop Opacity" type="float" vercond="User Version 2 &lt; 130">Alpha falloff multiplier at end angle</add>
-        <add name="Emissive Color" type="Color4" vercond="User Version 2 &lt; 130">Emissive color</add>
-        <add name="Emissive Multiple" type="float" vercond="User Version 2 &lt; 130">Multiplier for Emissive Color (RGB part)</add>
-        <add name="Soft Falloff Depth" type="float" vercond="User Version 2 &lt; 130"></add>
-        <add name="Greyscale Texture"  type="SizedString" vercond="User Version 2 &lt; 130">Points to an external texture, used as palette for SLSF1_Greyscale_To_PaletteColor/SLSF1_Greyscale_To_PaletteAlpha.</add>
-        <!-- Still causes errors -->
-        <add name="Unknown 10 Floats" type="float" arr1="10" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
-        <add name="Textures" type="SizedString" arr1="4" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
-        <add name="Unknown Float 1" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+        <add name="Falloff Start Angle" type="float" default="1.0">At this cosine of angle falloff will be equal to Falloff Start Opacity</add>
+        <add name="Falloff Stop Angle" type="float" default="1.0">At this cosine of angle falloff will be equal to Falloff Stop Opacity</add>
+        <add name="Falloff Start Opacity" type="float">Alpha falloff multiplier at start angle</add>
+        <add name="Falloff Stop Opacity" type="float">Alpha falloff multiplier at end angle</add>
+        <add name="Emissive Color" type="Color4">Emissive color</add>
+        <add name="Emissive Multiple" type="float">Multiplier for Emissive Color (RGB part)</add>
+        <add name="Soft Falloff Depth" type="float"></add>
+        <add name="Greyscale Texture"  type="SizedString">Points to an external texture, used as palette for SLSF1_Greyscale_To_PaletteColor/SLSF1_Greyscale_To_PaletteAlpha.</add>
+        <add name="Env Map Texture" type="SizedString" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+        <add name="Normal Texture" type="SizedString" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+        <add name="Env Mask Texture" type="SizedString" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
+        <add name="Environment Map Scale" type="float" vercond="(Version == 20.2.0.7) &amp;&amp; (User Version 2 == 130)" />
     </niobject>
     
     <bitflags name="SkyrimWaterShaderFlags" storage="byte">
@@ -6126,7 +6139,8 @@
 
     <niobject name="BSTriShape" inherit="BSShape">
         Fallout 4
-        <add name="Unknown 4 Floats" type="float" arr1="4" />
+        
+        <add name="Bound" type="SphereBV">The combined bounding volume of all submeshes.</add>
         <add name="Skin" type="Ref" template="NiObject" />
         <add name="BS Properties" type="Ref" template="NiProperty" arr1="2" />
         <add name="Vertex Flags" type="byte" arr1="8"/>
@@ -6137,46 +6151,45 @@
         <add name="Triangles" type="Triangle" arr1="Num Triangles" cond="Data Size &gt; 0" />
     </niobject>
 
-    <compound name="SubIndexRecordA">
+    <compound name="BSSITSSubSegment">
+        <add name="Triangle Offset" type="uint" />
+        <add name="Triangle Count" type="uint" />
+        <add name="Segment Offset" type="uint" />
         <add name="Unknown Int 1" type="uint" />
-        <add name="Unknown Int 2" type="uint" />
-        <add name="Unknown Int 3" type="uint" />
-        <add name="Unknown Int 4" type="uint" />
     </compound>
 
-    <compound name="SubIndexPart1">
-        <add name="Unknown Int 1" type="uint" />
-        <add name="Unknown Int 2" type="uint" />
-        <add name="Unknown Int 3" type="uint" />
+    <compound name="BSSITSSegment">
+        <add name="Triangle Offset" type="uint" />
+        <add name="Triangle Count" type="uint" />
+        <add name="Material Hash" type="uint" />
         <add name="Num Records" type="uint" />
-        <add name="Sub Index Record" type="SubIndexRecordA" arr1="Num Records" />
+        <add name="Sub Index Record" type="BSSITSSubSegment" arr1="Num Records" />
     </compound>
 
-    <compound name="SubIndexRecordB">
-        <add name="Unknown Int 1" type="uint" />
-        <add name="Unknown HFloat 1" type="hfloat" />
-        <add name="Unknown HFloat 2" type="hfloat" />
+    <compound name="BSSIMaterial">
+        <add name="Body Part Index" type="uint" >Unique ID Per Material Hash</add>
+        <add name="Material Hash" type="uint" />
         <add name="Num Data" type="uint" />
         <add name="Extra Data" type="float" arr1="Num Data" />
     </compound>
 
-    <compound name="SubIndexPart2">
-        <add name="NumA2" type="uint" />
-        <add name="NumB2" type="uint" />
-        <add name="Record A" type="uint" arr1="NumA2" />
-        <add name="Record B" type="SubIndexRecordB" arr1="NumB2" />
-        <add name="SSP Length" type="ushort" />
+    <compound name="BSSIMaterialSection">
+        <add name="Num Segments" type="uint" />
+        <add name="Num Materials" type="uint" />
+        <add name="Empty Materials" type="uint" arr1="Num Segments" />
+        <add name="Materials" type="BSSIMaterial" arr1="Num Materials" />
+        <add name="SSF Length" type="ushort" />
         <!-- There is no actual char support in NifSkope! -->
-        <add name="SSP File" type="byte" arr1="SSP Length" />
+        <add name="SSF File" type="byte" arr1="SSF Length" />
     </compound>
 
     <niobject name="BSSubIndexTriShape" inherit="BSTriShape">
         Fallout 4
-        <add name="Num Triangles 2" type="uint" cond="Data Size &gt; 0"/>
-        <add name="NumA" type="uint" cond="Data Size &gt; 0"/>
-        <add name="NumB" type="uint" cond="Data Size &gt; 0"/>
-        <add name="Sub Index Part 1" type="SubIndexPart1" arr1="NumA" cond="Data Size &gt; 0"/>
-        <add name="Sub Index Part 2" type="SubIndexPart2" cond="(NumA &lt; NumB) &amp;&amp; (Data Size &gt; 0)" />
+        <add name="Num Triangles 2" type="uint" calculated="1" cond="Data Size &gt; 0"/>
+        <add name="Num Segments" type="uint" cond="Data Size &gt; 0"/>
+        <add name="Num Materials" type="uint" calculated="1" cond="Data Size &gt; 0"/>
+        <add name="Segments" type="BSSITSSegment" arr1="Num Segments" cond="Data Size &gt; 0"/>
+        <add name="Material Sections" type="BSSIMaterialSection" cond="(Num Segments &lt; Num Materials) &amp;&amp; (Data Size &gt; 0)" />
     </niobject>
 
     <niobject name="BSMeshLODTriShape" inherit="BSTriShape">
@@ -6214,8 +6227,7 @@
     </niobject>
 
     <compound name="BSSkinBoneTrans">
-        <add name="BS Center" type="Vector3" >Bounding Sphere Center</add>
-        <add name="BS Radius" type="float" >Bounding Sphere Radius</add>
+        <add name="Bounds" type="SphereBV">The combined bounding volume of all submeshes.</add>
         <add name="Rotation" type="Matrix33" />
         <add name="Translation" type="Vector3" />
         <add name="Scale" type="float" />
@@ -6228,7 +6240,7 @@
         <add name="Num Bones" type="uint" />
         <add name="Bones" type="Ptr" template="NiNode" arr1="Num Bones" />
         <add name="Num Vector3 1" type="uint" />
-        <add name="Vector3 1" type="Vector3" arr1="Num Vector3 1" />
+        <add name="Vector3 1" type="Vector3" arr1="Num Vector3 1">default : 0.0f,1.0f,1.0f</add>
     </niobject>
 
     <niobject name="BSSkin::BoneData" inherit="NiObject">
@@ -6247,9 +6259,9 @@
     <compound name="BSConnectPoint">
         <add name="Root" type="SizedString" />
         <add name="Variable Name" type="SizedString" />
-        <add name="Unknown Float 1" type="float" />
-        <add name="Unknown 6 Shorts" type="ushort" arr1="6" />
-        <add name="Unknown 4 Floats" type="float" arr1="4" />
+        <add name="Rotation" type="Quaternion" />
+        <add name="Translation" type="Vector3" />
+        <add name="Scale" type="float" />
     </compound>
 
     <niobject name="BSConnectPoint::Parents" inherit="NiExtraData">
