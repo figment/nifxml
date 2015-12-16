@@ -1608,9 +1608,13 @@
     </compound>
 
     <compound name="BSVertexData">
-        <add name="Vertex" type="HalfVector3" />
-        <add name="Bitangent x" type="hfloat" cond="(ARG[5] &amp; 128) &amp;&amp; (ARG[2] &amp; 64)" />
-        <add name="Unknown Short 1" type="uint" cond="!((ARG[5] &amp; 128) &amp;&amp; (ARG[2] &amp; 64))">Normal nybble?</add>
+        <add name="Vertex" type="HalfVector3" cond="(!(ARG[6] &amp; 64))"/>
+        <add name="Bitangent x" type="hfloat" cond="(!(ARG[6] &amp; 64)) &amp;&amp; (ARG[5] &amp; 128) &amp;&amp; (ARG[2] &amp; 64)" />
+        <add name="Unknown Short 1" type="uint" cond="(!(ARG[6] &amp; 64)) &amp;&amp; !((ARG[5] &amp; 128) &amp;&amp; (ARG[2] &amp; 64))">Normal nybble?</add>
+        
+        <add name="Vertex 2" type="Vector3" cond="(ARG[6] &amp; 64)"/>
+        <add name="Bitangent x 2" type="float" cond="(ARG[6] &amp; 64)"/>
+        
         <add name="UV" type="HalfTexCoord" cond="ARG[5] &amp; 32" />
         <add name="Normal" type="ByteVector3" cond="ARG[5] &amp; 128" />
         <add name="Bitangent y" type="char" cond="ARG[5] &amp; 128" />
